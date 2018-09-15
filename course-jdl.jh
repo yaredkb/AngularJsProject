@@ -1,0 +1,60 @@
+entity Discipline {
+	disciplineName String required,
+    disciplineDescription String,
+    disciplinePrice Long
+}
+entity Program {
+	programName String required,
+    programDescription String,
+    programPrice Long
+}
+entity Course {
+	courseTitle String required,
+    coursedDescription String,
+    coursePrice Long
+    courseLevel Level
+}
+entity Lesson {
+	lessonTitle String required,
+    lessonDescription String,
+    language Languge
+}
+entity Resource {
+	resourceName String,
+   resourceDescription String,
+    resourceURL String,
+    resourcePreviewImage String,
+    resourceType ResourceType,
+    weight Integer
+}
+enum Level {
+	NOVICE, BIGINNER, INTERMEDIATE, ADVANCED, PROFESSIONAL
+}
+enum ResourceType {
+VIDEO, IMAGE, TUTORIAL, PAGE, PARTIAL, TOOL
+}
+enum Languge {
+	ENGLISH
+}
+relationship OneToMany {
+	Discipline{resources} to Resource,
+    Program{resources} to Resource,
+    Course{resources} to Resource,
+    Lesson{resources} to Resource
+}
+relationship ManyToMany {
+	Discipline{ program} to Program{disciplines},
+    Program{courses} to Course{Program},
+    Course{Lessons} to Lesson{courses}
+}
+//set pogination options
+paginate Lesson with infinite-scroll
+paginate Program, Course with pagination
+
+dto * with mapstruct
+// Set service options to all except few
+service all with serviceImpl /*except Program, Course*/
+//Set on angular suffix
+angularSuffix * with mySuffix
+
+
